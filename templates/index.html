@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="it" xmlns="">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+</head>
+<body>
+    <header>
+        {% include 'navbar.html' %}
+    </header>
+    <main class="m-1">
+        {% block content %}
+        {% endblock %}
+    </main>
+    <script src="{% static 'js/bootstrap.bundle.js' %}"> </script>
+</body>
+</html>

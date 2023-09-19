@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <h2>{{ activity.category }}</h2>
+    <br>
+    <div class="row">
+        <div class="col-sm">
+            <b>Data:</b> {{ activity.date }}
+            <br>
+            <b>Ora inizio:</b> {{ activity.start_hour }}
+        </div>
+        <div class="col-sm">
+            <b>Durata:</b> {{ activity.duration }}
+            <br>
+            <b>Ora fine:</b> {{ activity.end_hour }}
+        </div>
+    </div>
+    <br>
+    <div>
+        <b>Note:</b>
+        <br>
+        <label>
+            <textarea class="form-control" rows="10" style="width: 99vw" readonly>{{ activity.note }}</textarea>
+        </label>
+    </div>
+    <br>
+    <a class="btn btn-danger" href="/client/{{ client.id }}">Torna indietro</a>
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div>
+        <h2>{{ client.business_name }}</h2>
+        <hr>
+        <h4 class="mt-1 d-inline-block">Ore totali: </h4>
+        <p class="d-inline-block">{{ worked_hours.0 }}d {{ worked_hours.1 }}h {{ worked_hours.2 }}m</p>
+        <br>
+        <h4 class="d-inline-block">Totale parcelle: </h4>
+        <p class="d-inline-block">{{ client.total_of_parcels }}€</p>
+        <div class="row">
+            <div class="col-10">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        Parcelle
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for parcel in parcels %}
+                            <li><a class="dropdown-item" href="/client/{{ client.id }}/parcel/{{ parcel.id }}/update">{{ parcel.year }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-2">
+                <a class="btn btn-primary" href="/client/{{ client.id }}/parcel/create">Aggiungi parcella</a>
+            </div>
+        </div>
+        <hr>
+    </div>
+    <div>
+        <h3 class="mb-4">Crea attività:</h3>
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                {% for key,value in form.errors.items %}
+                    {{value}}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form class="row g-3" method="POST">
+            {% csrf_token %}
+            {% for field in form.hidden_fields %}
+                {{ field }}
+            {% endfor %}
+            {% for field in form.visible_fields %}
+                {% if field.name == 'note' %}
+                    <div class="col-12 mt-2">
+                        {{ field }}
+                    </div>
+                {% elif field.name == 'start_hour' %}
+                    <div class="col-md-6 mt-1">
+                        <label class="form-label">Ora inizio:</label>
+                        {{ field }}
+                    </div>
+                {% elif field.name == 'end_hour' %}
+                    <div class="col-md-6 mt-1">
+                        <label class="form-label">Ora fine:</label>
+                        {{ field }}
+                    </div>
+                {% else %}
+                    <div class="col-md-6 mt-2">
+                        {{ field }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <div class="col-12">
+                <input type="submit" class="btn btn-primary" value="Salva">
+            </div>
+        </form>
+    </div>
+    <hr>
+    <div class="my-4">
+        <form method="get">
+            <div class="row">
+                <div class="col-3">
+                    {{ filter.form.date__gte.errors }}
+                    Data inizio:
+                    {{ filter.form.date__gte }}
+                </div>
+                <div class="col-3">
+                    {{ filter.form.date__lte.errors }}
+                    Data fine:
+                    {{ filter.form.date__lte }}
+                </div>
+                <div class="col-3">
+                    {{ filter.form.category.errors }}
+                    Categoria:
+                    {{ filter.form.category }}
+                </div>
+                <div class="col-3">
+                    <br>
+                    <input type="submit" class="btn btn-primary" value="Filtra">
+                    <a class="btn btn-danger" href="/client/{{ client.id }}">Reset</a>
+                </div>
+            </div>
+        </form>
+        <table class="table table-primary my-2">
+            <thead>
+            <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Ora inizio</th>
+                <th scope="col">Ora fine</th>
+                <th scope="col">Durata</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for activity in activities %}
+                <tr>
+                    <th scope="row">{{ activity.date }}</th>
+                    <td>{{ activity.category }}</td>
+                    <td>{{ activity.start_hour }}</td>
+                    <td>{{ activity.end_hour }}</td>
+                    <td>{{ activity.duration }}</td>
+                    <td>
+                        <a class="btn btn-primary" href="/client/{{ client.id }}/activity/{{ activity.id }}">
+                            Info
+                        </a>
+                    <td>
+                        <a class="btn btn-danger" href="/client/{{ client.id }}/activity/{{ activity.id }}/delete">Cancella</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

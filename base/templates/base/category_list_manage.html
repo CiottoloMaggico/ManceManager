@@ -1,0 +1,54 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+    <div>
+        <h2>Crea Categoria:</h2>
+        <form class="row" method="post">
+            {% csrf_token %}
+            <div class="col-sm-3">
+                {{ form.category_name.errors }}
+                <label class="visually-hidden" for="{{ form.category_name.id_for_label }}"></label>
+                {{ form.category_name }}
+            </div>
+            <div class="col-auto">
+                <input type="submit" class="btn btn-primary" value="Crea">
+            </div>
+        </form>
+    </div>
+    <div class="my-4">
+        <div class="row">
+            <h2 class="col-6">Lista Categorie:</h2>
+            <form class="row col-6" method="get">
+                    <div class="col-8">
+                        {{ filter.form.category_name.errors }}
+                        {{ filter.form.category_name }}
+                    </div>
+                    <div class="col-4">
+                        <input type="submit" class="btn btn-primary" value="Cerca">
+                        <a class="btn btn-danger" href="/categories">Reset</a>
+                    </div>
+            </form>
+        </div>
+        <table class="table table-primary my-2">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Categoria</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for category in categories %}
+                <tr>
+                    <th scope="row">{{ category.id }}</th>
+                    <td>{{ category.category_name }}</td>
+                    <td>
+                        <a class="btn btn-danger float-end" href="/category/{{ category.id }}/delete">Cancella</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

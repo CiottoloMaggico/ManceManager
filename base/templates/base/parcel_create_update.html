@@ -1,0 +1,50 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <h1>{{ client.business_name }}</h1>
+    {% if update %}
+        <h5>Prezzo orario: {{ parcel_model.price_hour_rate }}</h5>
+    {% endif %}
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+            <div class="row align-items-baseline">
+                <div class="col-1">
+                    <h5>Anno:</h5>
+                </div>
+                <div class="col-3">
+                    {{ form.errors }}
+                    {{ form }}
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                {{ parcel.management_form }}
+                {% for quarter in parcel %}
+                    <div class="col-3 mb-3">
+                        <h3>{{ forloop.counter }}° trimestre</h3>
+                        {{ quarter.nested.management_form }}
+                        {{ quarter }}
+                        {% for month in quarter.nested %}
+                            <h5>{{ forloop.counter }}° mese</h5>
+                            {{ month }}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        <hr>
+        <div class="row">
+            <div class="col-1">
+                <a class="btn btn-secondary" href="/client/{{ client.id }}">Indietro</a>
+            </div>
+            {% if update %}
+                <div class="col-1">
+                    <a class="btn btn-danger" href="/client/{{ client.id }}/parcel/{{ parcel_model.id }}/delete">Cancella</a>
+                </div>
+            {% endif %}
+            <div class="col-1">
+                <input type="submit" class="btn btn-primary" value="Salva">
+            </div>
+        </div>
+    </form>
+{% endblock %}
