@@ -26,7 +26,7 @@ class Client(Model):
 
         days = (seconds // 3600) // 24
         hours = (seconds // 3600) % 24
-        minutes = seconds % 3600
+        minutes = (seconds % 3600) // 60
 
         return (days, hours, minutes)
 
